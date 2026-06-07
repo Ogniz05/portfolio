@@ -4,7 +4,8 @@
 - **React 19** + **Vite 8**
 - **Three.js 0.184** — sfondo 3D interattivo
 - **Framer Motion 12** — animazioni
-- Deploy: **Vercel** (repo GitHub: github.com/Ogniz05/portfolio)
+- Deploy: **Vercel** — https://nicolopersia.vercel.app
+- Repo: github.com/Ogniz05/portfolio
 
 ---
 
@@ -90,7 +91,19 @@
 
 ## Da fare
 
-- [ ] Aggiungere profilo LinkedIn in `Contact.jsx` (riga 72) e `Footer.jsx` (riga 42)
 - [ ] Sostituire 4 project card placeholder con progetti reali
+- [ ] Verificare URL LinkedIn corretto (`linkedin.com/in/nicolopersia`)
 - [ ] (Opzionale) Convertire PNG → WebP per risparmio ~30% peso immagini
-- [ ] Collegare form contatti a backend reale (Formspree, Netlify Forms, o simili)
+
+## Completato
+
+- [x] Form contatti via Formspree (`@formspree/react`, form ID: xpqepyko)
+- [x] LinkedIn aggiunto in Contact e Footer
+- [x] Open Graph + Twitter Card meta tags
+- [x] robots.txt
+- [x] Contrasto WCAG migliorato
+- [x] Cursor ripristinato su mobile/touch
+- [x] ErrorBoundary intorno a Hero (Three.js fallback)
+- [x] Particelle Three.js ridotte su mobile/low-end
+- [x] LoadingScreen: timer 5s→3s + preload immagini reali
+- [x] Deploy live: https://nicolopersia.vercel.app
