@@ -9,7 +9,8 @@ Portfolio personale di Nicolò Persia, Junior Developer da Bari.
 - React 19 + Vite 8
 - Three.js — scena 3D interattiva nella Hero
 - Framer Motion — animazioni e transizioni
-- @formspree/react — contact form
+- @formspree/react — contact form (form ID: xpqepyko)
+- @vercel/analytics — analytics visitatori
 
 ## Avvio locale
 
