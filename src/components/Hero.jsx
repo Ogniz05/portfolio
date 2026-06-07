@@ -7,7 +7,6 @@ const ROLES = ['Junior Developer', 'Web Designer', 'React Developer', 'Full Stac
 export default function Hero() {
   const canvasRef = useRef(null);
   const sceneRef = useRef(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
 
   const [displayedText, setDisplayedText] = useState('');
   const [roleIdx, setRoleIdx] = useState(0);
@@ -41,7 +40,12 @@ export default function Hero() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    } catch {
+      return;
+    }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
     renderer.setClearColor(0x000000, 0);
@@ -139,9 +143,13 @@ export default function Hero() {
       return pts;
     };
 
-    const particlesBlue = makeParticles(800, 0x00d9ff, 0.04);
-    const particlesMagenta = makeParticles(400, 0xff00ff, 0.035);
-    const particlesCyan = makeParticles(200, 0x00ffff, 0.06, 10);
+    const isMobile = window.innerWidth < 768;
+    const isLowEnd = typeof navigator.hardwareConcurrency === 'number' && navigator.hardwareConcurrency < 4;
+    const pMul = (isMobile || isLowEnd) ? 0.25 : 1;
+
+    const particlesBlue = makeParticles(Math.round(800 * pMul), 0x00d9ff, 0.04);
+    const particlesMagenta = makeParticles(Math.round(400 * pMul), 0xff00ff, 0.035);
+    const particlesCyan = makeParticles(Math.round(200 * pMul), 0x00ffff, 0.06, 10);
 
     let time = 0;
     let animId;

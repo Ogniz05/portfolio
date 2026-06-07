@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 
 const links = [
   { label: 'Progetti', href: '#projects' },
@@ -39,7 +38,7 @@ export default function Footer() {
               </svg>
             </a>
             <a
-              href="https://linkedin.com/"
+              href="https://www.linkedin.com/in/nicolopersia"
               target="_blank"
               rel="noopener noreferrer"
               className="footer__social"

@@ -9,7 +9,7 @@ const projects = [
     desc: 'Dashboard interattiva con grafici real-time, filtri dinamici e esportazione dati per un team di analisi.',
     tech: ['React', 'TypeScript', 'Chart.js'],
     color: '#00d9ff',
-    href: '#',
+    href: null,
   },
   {
     id: '03',
@@ -18,7 +18,7 @@ const projects = [
     desc: 'Piattaforma e-commerce completa con carrello, pagamenti Stripe e gestione inventory con pannello admin.',
     tech: ['Angular', 'Node.js', 'MySQL'],
     color: '#ff00ff',
-    href: '#',
+    href: null,
   },
   {
     id: '04',
@@ -27,7 +27,7 @@ const projects = [
     desc: 'Applicazione per la gestione dei task con drag-and-drop, collaborazione in tempo reale e notifiche push.',
     tech: ['React', 'Python', 'WebSocket'],
     color: '#00ffff',
-    href: '#',
+    href: null,
   },
   {
     id: '05',
@@ -36,7 +36,7 @@ const projects = [
     desc: 'Microservizio REST ad alta scalabilità con autenticazione JWT, rate limiting e documentazione Swagger.',
     tech: ['Java', 'Spring Boot', 'PostgreSQL'],
     color: '#00d9ff',
-    href: '#',
+    href: null,
   },
 ];
 
@@ -86,13 +86,17 @@ function ProjectCard({ project, index }) {
         </div>
 
         <div className="proj-card__footer">
-          <a href={project.href} className="proj-card__link">
-            <span>Esplora</span>
-            <motion.span
-              animate={{ x: hovered ? 4 : 0 }}
-              transition={{ duration: 0.2 }}
-            >→</motion.span>
-          </a>
+          {project.href ? (
+            <a href={project.href} className="proj-card__link" target="_blank" rel="noopener noreferrer">
+              <span>Esplora</span>
+              <motion.span
+                animate={{ x: hovered ? 4 : 0 }}
+                transition={{ duration: 0.2 }}
+              >→</motion.span>
+            </a>
+          ) : (
+            <span className="proj-card__wip">In sviluppo</span>
+          )}
         </div>
 
         <div className="proj-card__glow" />
@@ -256,6 +260,16 @@ export default function Projects() {
           transition: gap 0.2s;
         }
         .proj-card__link:hover { gap: 12px; }
+        .proj-card__wip {
+          font-size: 0.7rem;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          font-weight: 500;
+          color: var(--text-muted);
+          padding: 3px 10px;
+          border: 1px solid var(--border);
+          border-radius: 100px;
+        }
         .proj-card__glow {
           position: absolute;
           top: -60px; right: -60px;

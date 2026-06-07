@@ -1,7 +1,28 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const DURATION = 5000;
+const DURATION = 3000;
+
+const CRITICAL_IMAGES = ['/foto-profilo.png', '/pablo-racing.png'];
+
+const preloadImages = () =>
+  Promise.all(
+    CRITICAL_IMAGES.map(
+      src =>
+        new Promise(resolve => {
+          const img = new Image();
+          img.onload = img.onerror = resolve;
+          img.src = src;
+        })
+    )
+  );
+
+const particles = Array.from({ length: 14 }, (_, i) => ({
+  delay: `${i * 0.35}s`,
+  x: `${(i / 14) * 100}%`,
+  size: `${2 + (i % 4) + (i % 3) * 0.5}px`,
+  color: i % 3 === 0 ? 'var(--magenta)' : i % 3 === 1 ? 'var(--cyan)' : 'var(--neon-blue)',
+}));
 
 const messages = [
   'Inizializzazione portfolio...',
@@ -16,18 +37,18 @@ export default function LoadingScreen() {
   const [done, setDone] = useState(false);
   const [msgIndex, setMsgIndex] = useState(0);
 
-  const particles = useMemo(() =>
-    Array.from({ length: 14 }, (_, i) => ({
-      delay: `${i * 0.35}s`,
-      x: `${(i / 14) * 100}%`,
-      size: `${Math.random() * 4 + 2}px`,
-      color: i % 3 === 0 ? 'var(--magenta)' : i % 3 === 1 ? 'var(--cyan)' : 'var(--neon-blue)',
-    }))
-  , []);
 
   useEffect(() => {
     const start = performance.now();
     let raf;
+    let timerDone = false;
+    let imagesDone = false;
+
+    const tryFinish = () => {
+      if (timerDone && imagesDone) setTimeout(() => setDone(true), 400);
+    };
+
+    preloadImages().then(() => { imagesDone = true; tryFinish(); });
 
     const tick = (now) => {
       const elapsed = now - start;
@@ -37,7 +58,8 @@ export default function LoadingScreen() {
       if (elapsed < DURATION) {
         raf = requestAnimationFrame(tick);
       } else {
-        setTimeout(() => setDone(true), 400);
+        timerDone = true;
+        tryFinish();
       }
     };
 

@@ -10,8 +10,8 @@
   --bg-card: #111111;
   --bg-card-hover: #161616;
   --text: #f0ede8;
-  --text-muted: #555;
-  --text-secondary: #888;
+  --text-muted: #777;
+  --text-secondary: #aaa;
   --neon-blue: #00d9ff;
   --magenta: #ff00ff;
   --cyan: #00ffff;
@@ -45,6 +45,12 @@ body {
 }
 
 body * { cursor: none; }
+
+@media (max-width: 768px), (pointer: coarse) {
+  body, body * { cursor: auto; }
+  button { cursor: pointer; }
+  a { cursor: pointer; }
+}
 
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; display: block; }

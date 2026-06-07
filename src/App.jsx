@@ -1,3 +1,4 @@
+import { Component } from 'react';
 import LoadingScreen from './components/LoadingScreen';
 import CustomCursor from './components/CustomCursor';
 import Navbar from './components/Navbar';
@@ -10,6 +11,15 @@ import Curriculum from './components/Curriculum';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 
+class ErrorBoundary extends Component {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  render() {
+    if (this.state.hasError) return this.props.fallback ?? null;
+    return this.props.children;
+  }
+}
+
 export default function App() {
   return (
     <>
@@ -18,7 +28,9 @@ export default function App() {
       <CustomCursor />
       <Navbar />
       <main>
-        <Hero />
+        <ErrorBoundary>
+          <Hero />
+        </ErrorBoundary>
         <FeaturedProject />
         <Projects />
         <About />

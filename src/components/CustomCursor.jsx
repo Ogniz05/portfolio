@@ -1,6 +1,9 @@
 import { useEffect, useRef } from 'react';
 
 export default function CustomCursor() {
+  const isTouch =
+    typeof window !== 'undefined' &&
+    (window.matchMedia('(pointer: coarse)').matches || window.innerWidth <= 768);
   const dotRef = useRef(null);
   const ringRef = useRef(null);
   const mouse = useRef({ x: 0, y: 0 });
@@ -8,6 +11,7 @@ export default function CustomCursor() {
   const rafRef = useRef(null);
 
   useEffect(() => {
+    if (isTouch) return;
     const onMove = (e) => {
       mouse.current = { x: e.clientX, y: e.clientY };
       if (dotRef.current) {
@@ -45,8 +49,14 @@ export default function CustomCursor() {
     return () => {
       window.removeEventListener('mousemove', onMove);
       cancelAnimationFrame(rafRef.current);
+      links.forEach(l => {
+        l.removeEventListener('mouseenter', onEnterLink);
+        l.removeEventListener('mouseleave', onLeaveLink);
+      });
     };
-  }, []);
+  }, [isTouch]);
+
+  if (isTouch) return null;
 
   return (
     <>

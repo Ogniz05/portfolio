@@ -1,11 +1,20 @@
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { useForm } from '@formspree/react';
+
+const LINKEDIN_URL = 'https://www.linkedin.com/in/nicolopersia';
+const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function Contact() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-100px' });
   const [form, setForm] = useState({ name: '', email: '', message: '' });
-  const [sent, setSent] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [wasReset, setWasReset] = useState(false);
+
+  const [state, handleFormspreeSubmit] = useForm('xpqepyko');
+
+  const showSuccess = state.succeeded && !wasReset;
 
   const fade = (delay = 0) => ({
     initial: { opacity: 0, y: 30 },
@@ -13,13 +22,33 @@ export default function Contact() {
     transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1], delay },
   });
 
+  const validate = () => {
+    const errs = {};
+    if (!form.name.trim()) errs.name = 'Nome richiesto';
+    if (!form.email.trim()) errs.email = 'Email richiesta';
+    else if (!emailRe.test(form.email)) errs.email = 'Email non valida';
+    if (!form.message.trim()) errs.message = 'Messaggio richiesto';
+    else if (form.message.trim().length < 10) errs.message = 'Messaggio troppo breve (min 10 caratteri)';
+    return errs;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSent(true);
+    const errs = validate();
+    if (Object.keys(errs).length > 0) { setFieldErrors(errs); return; }
+    setFieldErrors({});
+    handleFormspreeSubmit(e);
   };
 
   const handleChange = (e) => {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+    if (fieldErrors[e.target.name]) setFieldErrors(errs => ({ ...errs, [e.target.name]: '' }));
+  };
+
+  const handleReset = () => {
+    setWasReset(true);
+    setForm({ name: '', email: '', message: '' });
+    setFieldErrors({});
   };
 
   return (
@@ -69,7 +98,7 @@ export default function Contact() {
               </a>
 
               <a
-                href="https://linkedin.com/"
+                href={LINKEDIN_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="contact__social-link"
@@ -77,7 +106,7 @@ export default function Contact() {
                 <div className="contact__social-icon">in</div>
                 <div>
                   <span className="contact__social-label">LinkedIn</span>
-                  <span className="contact__social-value">linkedin.com/in/tuousername</span>
+                  <span className="contact__social-value">linkedin.com/in/nicolopersia</span>
                 </div>
               </a>
 
@@ -106,7 +135,7 @@ export default function Contact() {
             animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
           >
-            {sent ? (
+            {showSuccess ? (
               <div className="contact__success">
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
@@ -116,22 +145,25 @@ export default function Contact() {
                   <div className="contact__success-icon">✦</div>
                   <h3>Messaggio inviato!</h3>
                   <p>Ti rispondo entro 24 ore.</p>
+                  <button className="contact__reset" onClick={handleReset}>
+                    Invia un altro messaggio
+                  </button>
                 </motion.div>
               </div>
             ) : (
-              <form className="contact__form" onSubmit={handleSubmit}>
+              <form className="contact__form" onSubmit={handleSubmit} noValidate>
                 <div className="contact__field">
                   <label className="contact__label" htmlFor="name">Nome</label>
                   <input
                     id="name"
                     name="name"
                     type="text"
-                    className="contact__input"
+                    className={`contact__input${fieldErrors.name ? ' contact__input--error' : ''}`}
                     placeholder="Il tuo nome"
                     value={form.name}
                     onChange={handleChange}
-                    required
                   />
+                  {fieldErrors.name && <span className="contact__error">{fieldErrors.name}</span>}
                 </div>
 
                 <div className="contact__field">
@@ -140,12 +172,12 @@ export default function Contact() {
                     id="email"
                     name="email"
                     type="email"
-                    className="contact__input"
+                    className={`contact__input${fieldErrors.email ? ' contact__input--error' : ''}`}
                     placeholder="tua@email.com"
                     value={form.email}
                     onChange={handleChange}
-                    required
                   />
+                  {fieldErrors.email && <span className="contact__error">{fieldErrors.email}</span>}
                 </div>
 
                 <div className="contact__field">
@@ -153,23 +185,28 @@ export default function Contact() {
                   <textarea
                     id="message"
                     name="message"
-                    className="contact__input contact__textarea"
+                    className={`contact__input contact__textarea${fieldErrors.message ? ' contact__input--error' : ''}`}
                     placeholder="Descrivi il tuo progetto..."
                     rows={5}
                     value={form.message}
                     onChange={handleChange}
-                    required
                   />
+                  {fieldErrors.message && <span className="contact__error">{fieldErrors.message}</span>}
                 </div>
+
+                {state.errors && state.errors.length > 0 && (
+                  <p className="contact__server-error">Errore nell&apos;invio. Riprova più tardi.</p>
+                )}
 
                 <motion.button
                   type="submit"
                   className="contact__submit"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={state.submitting ? {} : { scale: 1.02 }}
+                  whileTap={state.submitting ? {} : { scale: 0.98 }}
+                  disabled={state.submitting}
                 >
-                  <span>Invia messaggio</span>
-                  <span className="contact__submit-arrow">→</span>
+                  <span>{state.submitting ? 'Invio in corso...' : 'Invia messaggio'}</span>
+                  {!state.submitting && <span className="contact__submit-arrow">→</span>}
                   <div className="contact__submit-glow" />
                 </motion.button>
               </form>
@@ -387,6 +424,46 @@ export default function Contact() {
         .contact__success p {
           color: var(--text-secondary);
           font-size: 0.95rem;
+          margin-bottom: 28px;
+        }
+        .contact__reset {
+          display: inline-block;
+          padding: 10px 24px;
+          border: 1px solid var(--border-neon);
+          border-radius: var(--radius-sm);
+          color: var(--neon-blue);
+          font-size: 0.8rem;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          font-weight: 500;
+          transition: background 0.3s, box-shadow 0.3s;
+        }
+        .contact__reset:hover {
+          background: var(--neon-blue-dim);
+          box-shadow: 0 0 16px rgba(0,217,255,0.2);
+        }
+        .contact__input--error {
+          border-color: rgba(255, 80, 80, 0.6) !important;
+          box-shadow: 0 0 0 3px rgba(255, 80, 80, 0.08) !important;
+        }
+        .contact__error {
+          font-size: 0.75rem;
+          color: #ff6b6b;
+          margin-top: 2px;
+          letter-spacing: 0.02em;
+        }
+        .contact__server-error {
+          font-size: 0.85rem;
+          color: #ff6b6b;
+          text-align: center;
+          padding: 10px;
+          border: 1px solid rgba(255, 80, 80, 0.3);
+          border-radius: var(--radius-sm);
+          background: rgba(255, 80, 80, 0.06);
+        }
+        .contact__submit:disabled {
+          opacity: 0.6;
+          pointer-events: none;
         }
         @media (max-width: 900px) {
           .contact__grid { grid-template-columns: 1fr; gap: 60px; }
