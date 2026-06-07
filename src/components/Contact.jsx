@@ -160,6 +160,7 @@ export default function Contact() {
                     type="text"
                     className={`contact__input${fieldErrors.name ? ' contact__input--error' : ''}`}
                     placeholder="Il tuo nome"
+                    autoComplete="name"
                     value={form.name}
                     onChange={handleChange}
                   />
@@ -174,6 +175,7 @@ export default function Contact() {
                     type="email"
                     className={`contact__input${fieldErrors.email ? ' contact__input--error' : ''}`}
                     placeholder="tua@email.com"
+                    autoComplete="email"
                     value={form.email}
                     onChange={handleChange}
                   />
@@ -187,6 +189,7 @@ export default function Contact() {
                     name="message"
                     className={`contact__input contact__textarea${fieldErrors.message ? ' contact__input--error' : ''}`}
                     placeholder="Descrivi il tuo progetto..."
+                    autoComplete="off"
                     rows={5}
                     value={form.message}
                     onChange={handleChange}
