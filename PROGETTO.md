@@ -5,8 +5,8 @@
 - **React 19** + **Vite 8**
 - **Three.js 0.184** — sfondo 3D interattivo
 - **Framer Motion 12** — animazioni
-- **@formspree/react** — contact form (form ID: xpqepyko)
-- **@vercel/analytics** — analytics visitatori
+- **@formspree/react** — contact form (form ID: xpqepyko) — funzionante
+- **@vercel/analytics** — analytics visitatori — funzionante
 - Deploy: **Vercel** — https://nicolopersia.vercel.app
 - Repo: github.com/Ogniz05/portfolio
 
@@ -93,7 +93,8 @@
 - [x] Deploy su Vercel — https://nicolopersia.vercel.app
 - [x] Alias `nicolopersia.vercel.app` impostato
 - [x] Deploy automatico ad ogni `git push` su main
-- [x] Vercel Analytics attivo (`@vercel/analytics`)
+- [x] Vercel Analytics attivo e funzionante (`@vercel/analytics`) — confermato
+- [x] `autocomplete` attributes aggiunti ai campi form (nome → `name`, email → `email`, messaggio → `off`)
 
 ### SEO
 - [x] Open Graph + Twitter Card meta tags (`index.html`)
