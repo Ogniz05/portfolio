@@ -38,7 +38,7 @@ export default function Footer() {
               </svg>
             </a>
             <a
-              href="https://www.linkedin.com/in/nicolopersia"
+              href="https://www.linkedin.com/in/nicolo-persia"
               target="_blank"
               rel="noopener noreferrer"
               className="footer__social"

@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useForm } from '@formspree/react';
 
-const LINKEDIN_URL = 'https://www.linkedin.com/in/nicolopersia';
+const LINKEDIN_URL = 'https://www.linkedin.com/in/nicolo-persia';
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function Contact() {
@@ -106,7 +106,7 @@ export default function Contact() {
                 <div className="contact__social-icon">in</div>
                 <div>
                   <span className="contact__social-label">LinkedIn</span>
-                  <span className="contact__social-value">linkedin.com/in/nicolopersia</span>
+                  <span className="contact__social-value">linkedin.com/in/nicolo-persia</span>
                 </div>
               </a>
 

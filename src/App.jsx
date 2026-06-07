@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import LoadingScreen from './components/LoadingScreen';
 import CustomCursor from './components/CustomCursor';
 import Navbar from './components/Navbar';
@@ -39,6 +40,7 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
+      <Analytics />
     </>
   );
 }
